@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %} {{ user.first_name }} {% endblock %}
+{% block title %} {{ user.first_name }} {{ user.last_name }} {% endblock %}
 
 {% block content %}
-    <img src="{{user.image_url}}" alt="{{user.first_name}} profile pic">
+{% if user.image_url %}
+<div>
+    <img src="{{user.image_url}}" alt="{{user.first_name}}'s profile pic">
+</div>    
+{% endif %}
+<div>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-    <button id="edit">Edit</button>
-    <button id="delete">Delete</button>
-    
+    <button formaction="/users/{{ user.id }}/edit" formmethod="get" id="edit">Edit</button>
+    <button formaction="/users/{{ user.id }}/delete" formmethod="post" id="delete">Delete</button>
+</div>    
 {% endblock %}
