@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+    <h2>Edit a user</h2>
+    <!-- {post-id}? -->
+    <form action="/posts/{{post.id}}/edit" method="post">
+        <label for="title">Title </label> <input type="text" name="title" placeholder="First Post!">
+        <label for="content">Post Content </label> <input type="text" name="content" placeholder="Oh, Hi!">
+        
+        <button class="cancel" id="cancel">Cancel</button>
+        <button class="submit"type="submit" id="save">Save</button>
+    </form>
+    
+{% endblock %}
