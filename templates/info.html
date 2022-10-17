@@ -6,11 +6,25 @@
 {% if user.image_url %}
 <div>
     <img src="{{user.image_url}}" alt="{{user.first_name}}'s profile pic">
-</div>    
+</div>
+{% else %}
+<div>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOSa_h6nw2vTXwSh39ini4y14w5NJEhPLRDg&usqp=CAU" alt="No Profile Pic Yet!">
+</div>
 {% endif %}
 <div>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <button formaction="/users/{{ user.id }}/edit" formmethod="get" id="edit">Edit</button>
     <button formaction="/users/{{ user.id }}/delete" formmethod="post" id="delete">Delete</button>
 </div>    
+    <h3>Posts</h3>
+    <ul>
+        {% for post in posts %}
+        <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+    <button>Add Post</button>
+<div>
+
+</div>
 {% endblock %}
