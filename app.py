@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, request, redirect, render_template, current_app
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 
 
@@ -21,13 +21,17 @@ db.create_all()
 def show_home():
     """show home page"""
 
-    return redirect('/users')
+    posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+
+    return render_template('posts/homepage.html', posts=posts)
 
 @app.errorhandler(404)
 def page_not_found(e):
     """show 404 page"""
 
     return render_template('404.html'), 404
+
+############## USER ROUTES BELOW ################
 
 @app.route('/users')
 def show_all_users():
@@ -102,13 +106,13 @@ def delete_user(user_id):
 
 @app.route('/users/<int:user_id>/posts/new')
 def posts_add_post_form(user_id):
-"""Show form to add a post for that user."""
+    """Show form to add a post for that user."""
     user = User.query.get_or_404(user_id)
-    return render_template('posts/create_post.html' user=user)
+    return render_template('posts/create_post.html', user=user)
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
 def posts_handle_add_post(user_id):
-"""Handle add form; add post and redirect to the user detail page."""
+    """Handle add form; add post and redirect to the user detail page."""
     user = User.query.get_or_404(user_id)
     new_post = Post(title=request.form['title'],
                     content=request.form['content'],
@@ -122,20 +126,20 @@ def posts_handle_add_post(user_id):
 
 @app.route('/posts/<int:post_id>') ########## post_id???
 def posts_show_post_details(post_id):
-"""Show a post.
-Show buttons to edit and delete the post."""
+    """Show a post.
+    Show buttons to edit and delete the post."""
     post = Post.query.get_or_404(post_id)
     return render_template('posts/post.html', post=post)
 
 @app.route('/posts/<int:post_id>/edit')
 def posts_edit_post_form(post_id):
-"""Show form to edit a post, and to cancel (back to user page)."""
+    """Show form to edit a post, and to cancel (back to user page)."""
     post = Post.query.get_or_404(post_id)
     return render_template('posts/edit_post.html', post=post)
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def posts_handle_edit_post(post_id):
-"""Handle editing of a post. Redirect back to the post view."""
+    """Handle editing of a post. Redirect back to the post view."""
     post = Post.query.get_or_404(post_id)
     post.title = request.form['title']
     post.content = request.form['content']
@@ -147,7 +151,7 @@ def posts_handle_edit_post(post_id):
 
 @app.route('/posts/<int:post_id>/delete', methods=['POST'])
 def posts_delete(post_id):
-"""Delete the post."""
+    """Delete the post."""
     post = Post.query.get_or_404(post_id)
 
     db.session.delete(post)
