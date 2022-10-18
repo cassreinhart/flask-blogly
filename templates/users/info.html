@@ -14,17 +14,24 @@
 {% endif %}
 <div>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-    <button formaction="/users/{{ user.id }}/edit" formmethod="get" id="edit">Edit</button>
-    <button formaction="/users/{{ user.id }}/delete" formmethod="post" id="delete">Delete</button>
-</div>    
+    <form>
+        <button formaction="/users/{{ user.id }}/edit" formmethod="get" class="edit">Edit</button>
+        <button formaction="/users/{{ user.id }}/delete" formmethod="post" class="delete">Delete</button>
+    </form>    
+</div>   
+<div>
     <h3>Posts</h3>
     <ul>
-        {% for post in posts %}
-        <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
+        {% for post in user.posts %}
+        <li>
+            <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+            <small>{{ post.readable_date }}</small>
+        </li>
         {% endfor %}
     </ul>
-    <button>Add Post</button>
-<div>
-
+    <form action="get">
+        <button formaction="/users/{{ user.id }}/posts/new" formmethod="get" class="submit">Add Post</button>
+    </form>
+    
 </div>
 {% endblock %}

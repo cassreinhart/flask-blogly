@@ -7,11 +7,12 @@
     <div class="post">
         <h2>{{ post.title }}</h2>    
         <p>{{ post.content }}</p>
-        <blockquote>By {{ user.first_name }} {{ user.last_name }}</blockquote>
-       
-        <button class="cancel">Cancel</button>
-        <button class="submit">Edit</button>
-        <button class="delete">Delete</button>
+        <blockquote>By {{ user.first_name }} {{ user.last_name }} on {{ post.readable_date }}</blockquote>
+       <form>
+            <button class="cancel" formmethod="get" formaction="/users/{{ post.user_id }}">Cancel</button>
+            <button class="submit" formmethod="get" formaction="/posts/{{ post.id }}/edit">Edit</button>
+            <button class="delete" formmethod="post" formaction="/posts/{{ post.id }}/delete">Delete</button>
+        </form>
     </div>
     
 {% endblock %}

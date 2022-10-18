@@ -27,8 +27,15 @@ class FlaskTests(TestCase):
             self.assertEqual(res.status_code, 200)
             self.assertIn('<label for="first_name">First Name </label> <input type="text" name="first_name">')
 
-        def test_user_delete(self):
-            with app.test_client() as client:
-                res = client.get('/users/1/delete')
-                
-                self.assertNotIn('<a href="users/1">')
+    def test_user_delete(self):
+        with app.test_client() as client:
+            res = client.get('/users/1/delete')
+            
+            self.assertNotIn('<a href="users/1">')
+
+    def test_add_post_form(self):
+        with app.test_client() as client:
+            res = client.get('/users/1/posts/new')
+
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('<form action="/users/1/posts/new" method="post">')   
