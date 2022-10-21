@@ -214,8 +214,10 @@ def show_edit_tag_form(tag_id):
 @app.route('/tags/<int:tag_id>/edit', methods=['POST'])
 def handle_edit_tag(tag_id):
     """Process edit form, edit tag, and redirects to the tags list."""
+
     tag = Tag.query.get_or_404(tag_id)
     tag.name = request.form['name']
+    
     db.session.add(tag)
     db.session.commit()
     flash(f"Tag: {tag.name} edited!")
