@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit Tag {% endblock %}
+
+{% block content %}
+    <div class="form">
+        <h3>Edit a Tag</h3>
+        <form action="/tags/{{ tag.id }}/edit" method="post">
+            <!-- On form submit, send data to this url-- do I need this if I have the formaction in buttons below? -->
+            <label for="name">Name </label> <input type="text" name="name" id="name" placeholder="Enter a new tag name" value="{{ tag.name }}">
+            <div>
+                {% for post in posts %}
+                <div>
+                    <input type="checkbox" name="posts" value="{{ post.id }}" id="post_{{ post.id }}"
+                        {% if post in tag.posts %}
+                        checked
+                        {% endif %}>
+                    <label for="post_{{ post.id }}">{{ post.title }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="cancel" formaction="/tags">Cancel</button>
+            <button formaction="/tags/{{ tag.id }}/edit" formmethod="post" type="submit" class="submit">Edit</button> 
+            <!-- Not sure about above form actions -->
+        </form>
+    </div>
+{% endblock %}

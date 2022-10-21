@@ -24,6 +24,9 @@ class User(db.Model):
 
     posts = db.relationship("Post", backref='user', cascade="all, delete-orphan")
 
+    def __repr__(self):
+        return f"<User {self.id} {self.first_name} {self.last_name}>"
+
 class Post(db.Model):
     """create user blog post"""
 
@@ -35,8 +38,34 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now) 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    tags = db.relationship('Tag', secondary="posts_tags", backref="posts") #adds "through" relationship
+
     @property
     def readable_date(self):
         """return formatted date"""
 
         return self.created_at.strftime("%a %b %-d %Y, %-I:%M %p")
+    
+    def __repr__(self):
+        return f"<Post {self.id} {self.title} {self.user_id}>"
+
+class Tag(db.Model):
+    """A tag for posts"""
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+    def __repr__(self):
+        return f"<Tag {self.id} {self.name}>"
+
+class PostTag(db.Model):
+    """Map a tag to a post."""
+
+    __tablename__ = "posts_tags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+
+    
